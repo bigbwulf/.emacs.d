@@ -28,13 +28,10 @@
 (electric-pair-mode 1)
 (setq electric-pair-preserve-balance nil)
 
-;; use bash in shell
-(setq-default explicit-shell-file-name "/bin/bash")
-
 ;; word wrap
 (setq-default word-wrap t)
 
-;; For flycheck, add MELPA repositories
+;; add MELPA repositories
 (require 'package)
 
 (add-to-list 'package-archives
@@ -44,12 +41,31 @@
 ;; global syntax checking with flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; activate IDO
-  (require 'ido)
-    (ido-mode t)
+(setq version-control t     ;; Use version numbers for backups.
+      kept-new-versions 10  ;; Number of newest versions to keep.
+      kept-old-versions 0   ;; Number of oldest versions to keep.
+      delete-old-versions t ;; Don't ask to delete excess backup versions.
+      backup-by-copying t)  ;; Copy all files, don't rename them.(setq backup-directory-alist `(("." . "~/.emacs.d/back")))
 
-;; markdown-mode
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(package-initialize)
+(setq vc-make-backup-files t)
+
+;; Default and per-save backups go here:
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup/per-save")))
+
+(defun force-backup-of-buffer ()
+  ;; Make a special "per session" backup at the first save of each
+  ;; emacs session.
+  (when (not buffer-backed-up)
+    ;; Override the default parameters for per-session backups.
+    (let ((backup-directory-alist '(("" . "~/.emacs.d/backup/per-session")))
+          (kept-new-versions 3))
+      (backup-buffer)))
+  ;; Make a "per save" backup on each save.  The first save results in
+  ;; both a per-session and a per-save backup, to keep the numbering
+  ;; of per-save backups consistent.
+  (let ((buffer-backed-up nil))
+    (backup-buffer)))
+
+(add-hook 'before-save-hook  'force-backup-of-buffer)
+
+
