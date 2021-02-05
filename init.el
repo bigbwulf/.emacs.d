@@ -9,7 +9,10 @@
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-enabled-themes (quote (deeper-blue)))
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (markdown-mode flycheck))))
+ '(org-agenda-files
+   (quote
+    ("~/uni/cs680/notes.org" "/home/ajb/org/family.org" "/home/ajb/org/finances.org" "/home/ajb/org/health.org" "/home/ajb/org/orginizer.org" "/home/ajb/org/social.org" "/home/ajb/org/template.org")))
+ '(package-selected-packages (quote (adaptive-wrap markdown-mode flycheck))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -29,7 +32,9 @@
 (setq electric-pair-preserve-balance nil)
 
 ;; word wrap
-(setq-default word-wrap t)
+;;(setq-default word-wrap t)
+(global-visual-line-mode t)
+
 
 ;; add MELPA repositories
 (require 'package)
@@ -73,4 +78,10 @@
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
-(setq org-agenda-files '("~/org"))
+;; (setq org-agenda-files '("~/org"))
+(setq org-agenda-files (directory-files-recursively "~/" "\\.org$"))
+
+;; start Emacs server
+(server-start) 
+
+
