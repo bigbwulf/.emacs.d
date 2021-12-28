@@ -1,3 +1,7 @@
+;;; init.el --- Initialization file for Emacs
+;;; Commentary: Emacs Startup File --- initialization for Emacs
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -7,12 +11,35 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
- '(custom-enabled-themes (quote (deeper-blue)))
+ '(custom-enabled-themes '(deeper-blue))
+ '(gdb-many-windows t)
  '(inhibit-startup-screen t)
  '(org-agenda-files
-   (quote
-    ("~/uni/cs680/notes.org" "/home/ajb/org/family.org" "/home/ajb/org/finances.org" "/home/ajb/org/health.org" "/home/ajb/org/orginizer.org" "/home/ajb/org/social.org" "/home/ajb/org/template.org")))
- '(package-selected-packages (quote (adaptive-wrap markdown-mode flycheck))))
+   '("~/uni/cs680/notes.org" "/home/ajb/org/family.org" "/home/ajb/org/finances.org" "/home/ajb/org/health.org" "/home/ajb/org/orginizer.org" "/home/ajb/org/social.org" "/home/ajb/org/template.org"))
+ '(package-selected-packages
+   '(conda use-package jupyter ein magit adaptive-wrap markdown-mode flycheck))
+ '(safe-local-variable-values
+   '((eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~./include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/craftingInterpreters/chapter1/C/include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/job/kdtree/include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/job/multimap/include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/job/spatial/include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/job/spatial-tree/include/")))
+     (eval setq flycheck-gcc-include-path
+	   (list
+	    (expand-file-name "~/code/job/trees/include/"))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -84,4 +111,43 @@
 ;; start Emacs server
 (server-start) 
 
+;; ibuffer replace stupid default one
+(global-set-key (kbd "C-x C-b") 'ibuffer)
 
+;; open alias
+(defalias 'emc 'find-file)
+
+;; clear shell
+(local-set-key (kbd "C-<backspace>") (lambda () (interactive) (eshell/clear 1)))
+
+
+;; Jupyter notebook stuff
+(require 'use-package)
+(use-package jupyter)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (shell .t)
+   ;; Python and jupyter
+   (python . t)
+   (jupyter . t)))
+
+(org-babel-jupyter-override-src-block "python")
+
+(setq ob-async-no-async-languages-alist '("python" "jupyter-python"))
+
+(use-package conda)
+
+
+
+(defun my/juper-refresh-kernelspecs ()
+  "Refresh Jupyter kernelspecs"
+  (interactive)
+  (jupyter-available-kernelspecs t))
+
+
+;; desktop save mode
+(desktop-save-mode 1)
+
+(setq compile-command "make -k -C ../ remake")
