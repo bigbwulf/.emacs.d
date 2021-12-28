@@ -17,7 +17,7 @@
  '(org-agenda-files
    '("~/uni/cs680/notes.org" "/home/ajb/org/family.org" "/home/ajb/org/finances.org" "/home/ajb/org/health.org" "/home/ajb/org/orginizer.org" "/home/ajb/org/social.org" "/home/ajb/org/template.org"))
  '(package-selected-packages
-   '(conda use-package jupyter ein magit adaptive-wrap markdown-mode flycheck))
+   '(highlight-parentheses conda use-package jupyter ein magit adaptive-wrap markdown-mode flycheck))
  '(safe-local-variable-values
    '((eval setq flycheck-gcc-include-path
 	   (list
@@ -111,8 +111,27 @@
 ;; start Emacs server
 (server-start) 
 
-;; ibuffer replace stupid default one
+;; highlight parenthesis
+(require 'highlight-parentheses)
+(add-hook 'prog-mode-hook 'highlight-parentheses-mode)
+
+
+;; ibuffer stuff
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(setq ibuffer-saved-filter-groups
+      '(("home"
+	("emacs-config" (or (filename . ".emacs.d")))
+	("org" (mode . org-mode))
+	("source" (filename . "src"))
+	("header" (filename . "include"))
+	("Makefile" (mode . make-mode)))))
+
+(add-hook 'ibuffer-mode-hook
+	  '(lambda ()
+	     (ibuffer-switch-to-saved-filter-groups "home")))
+
+(setq )
+	 
 
 ;; open alias
 (defalias 'emc 'find-file)
