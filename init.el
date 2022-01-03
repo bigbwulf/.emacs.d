@@ -13,11 +13,13 @@
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-enabled-themes '(deeper-blue))
  '(gdb-many-windows t)
+ '(gdb-show-main t)
+ '(gud-gdb-command-name "gdb -i=mi ../bin/test")
  '(inhibit-startup-screen t)
  '(org-agenda-files
    '("~/uni/cs680/notes.org" "/home/ajb/org/family.org" "/home/ajb/org/finances.org" "/home/ajb/org/health.org" "/home/ajb/org/orginizer.org" "/home/ajb/org/social.org" "/home/ajb/org/template.org"))
  '(package-selected-packages
-   '(highlight-parentheses conda use-package jupyter ein magit adaptive-wrap markdown-mode flycheck))
+   '(gdb-mi quelpa-use-package hydra quelpa highlight-parentheses conda use-package jupyter ein magit adaptive-wrap markdown-mode flycheck))
  '(safe-local-variable-values
    '((eval setq flycheck-gcc-include-path
 	   (list
@@ -124,13 +126,20 @@
 	("org" (mode . org-mode))
 	("source" (filename . "src"))
 	("header" (filename . "include"))
-	("Makefile" (mode . make-mode)))))
+	("Makefile" (or (mode . make-mode)
+			(filename . "Makefile")))
+	("gdb" (or (mode . gud-mode))))))
 
 (add-hook 'ibuffer-mode-hook
 	  '(lambda ()
+	     (ibuffer-auto-mode 1)
 	     (ibuffer-switch-to-saved-filter-groups "home")))
 
-(setq )
+(setq ibuffer-expert t)
+;;(setq ibuffer-show-empty-filter-groups nil)
+
+
+
 	 
 
 ;; open alias
@@ -169,4 +178,9 @@
 ;; desktop save mode
 (desktop-save-mode 1)
 
-(setq compile-command "make -k -C ../ remake")
+(setq compile-command "make -k -C ../")
+
+;;gdb-m
+(require 'quelpa-use-package)
+
+
